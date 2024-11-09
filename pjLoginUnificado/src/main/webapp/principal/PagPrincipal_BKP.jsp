@@ -5,8 +5,8 @@
 <%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>
 <%@page import="br.com.multicloud.modal.Aplicacao"%>   
 <%@page import="br.com.multicloud.modal.UserAplicativo"%> 
-<%@page import="br.com.multicloud.modal.ModalUrlAplicacao"%> 
- 
+
+  
 <%@page import="java.util.List"%>
 <%@page import="java.util.Optional"%>
     
@@ -77,37 +77,26 @@
                   <div class="main-body">
                       <div class="page-wrapper">
                           <div class="page-body">
-                          
- <form class="form-material" action="#" method="post" id="formLoginUniversal" >    
-                  
-                              <input type="hidden"  value=<%= session.getAttribute("urlApliParametros")%> id="idUrlAplicacao">
-                              
+ 
                               <p class="h5"><strong>Sistemas</strong></p>
 							  <div class="row my-12 text-primary">
                           <% 
-//                             List<Aplicacao> aplicacoes           = (List<Aplicacao>) session.getAttribute("vg_aplicacoes");  
-                             List<UserAplicativo> userAplicativos = (List<UserAplicativo>)session.getAttribute("vg_userAplicativo");  
-                             String aplicGestaoContrato           = null;
-                             Boolean aplicGestaoContratoView      = false;
-                             String aplicGMUD                     = null;
-                             Boolean aplicGMUDView                = false;
-
-                             if( userAplicativos != null ){
+                          
+                             List<UserAplicativo> userAplicativo = (List<UserAplicativo>)session.getAttribute("vg_userAplicativo");  
+                             List<Aplicacao> aplicacoes = (List<Aplicacao>) session.getAttribute("vg_aplicacoes");  
+                             
+                             
+                             userAplicativo.forEach(elemento ->{
+                            	 elemento.getAplicacao().getAplicacao(); 
                             	 
-                            	 
-                                 for (UserAplicativo userAplicativo : userAplicativos) {
-                                	 if( userAplicativo.getAplicacao().getAplicacao().equals("Gestao de Contratos") ){
-                                         aplicGestaoContrato     = userAplicativo.getAplicacao().getAplicacao().toString();
-                                         aplicGestaoContratoView = userAplicativo.getAplicativoView();
-                                	 }else{
-                                		 aplicGMUD = userAplicativo.getAplicacao().getAplicacao();
-                                		 aplicGMUDView = userAplicativo.getAplicativoView();
-                                	 }
-                            	 }
-                            	 
-                                 if( aplicGestaoContratoView ){
-                                    if( aplicGestaoContrato != null && aplicGestaoContrato.equals("Gestao de Contratos") ){	 
-                            		  String urlPortalMultiCloud = (String) session.getAttribute("urlPortalMultiCloud");  
+                             });
+                             
+                             userAplicativo.get(0).getAplicativoView();
+                             
+                             if( aplicacoes != null ){
+                            	 Optional<Aplicacao> aplicacao = aplicacoes.stream().filter( x -> "Gestao de Contratos".equals(x.getAplicacao() ) ).findFirst();
+                            	 if( aplicacao.isPresent() ){
+                            		 String urlPortalMultiCloud = (String) session.getAttribute("urlPortalMultiCloud");  
                           %>
                                      <div class="col-md-4" style="max-width: 15rem;">
 					                   <div class="card text-center h-10 wrimagecard wrimagecard-topimage" style="max-width: 15rem;">
@@ -115,8 +104,7 @@
 							                 <div class="text-c-purple text-right" data-toggle="tooltip" data-placement="top" title="Sistema de Gestão de Contrato">
                                                <i class="fa fa-lock f-1" style="font-size: 22px; color: white;"></i>
                                              </div>
-							                 <!-- <a href="<%= urlPortalMultiCloud %>" class="waves-effect waves-dark">  -->
-							                 <a href="javascript:DoPost('PortalMultiCloud')"   class="waves-effect waves-dark">  
+							                 <a href="<%= urlPortalMultiCloud %>" class="waves-effect waves-dark"> 
 							                    <h6><i class="fa fa-handshake-o fa-3x text-primary" ></i></h6>
 							                    <h6 class="card-title text-dark">Portal MultiCloud</h6>
 							                 </a>
@@ -124,7 +112,7 @@
 					                   </div>
                                      </div>
                           <% 		 
-                            	    }else{
+                            	 }else{
                           %>
 								       <div class="col-md-4" style="max-width: 15rem;">
 								         <div class="card text-center h-10 wrimagecard wrimagecard-topimage" style="max-width: 15rem;">
@@ -140,12 +128,9 @@
 								         </div>
 								       </div>								
                          <%  		 
-                            	    }
-                            	 
-                                 }
-                                 if( aplicGMUDView ){
-                                 
-                            	   if( aplicGMUD != null && aplicGMUD.equals("Gestao de GMUD") ){	
+                            	 }
+                            	 aplicacao = aplicacoes.stream().filter( x -> "Gestao de GMUD".equals(x.getAplicacao()) ).findFirst();
+                            	 if( aplicacao.isPresent() ){
                             		 String urlPortalGmud = (String) session.getAttribute("urlPortalGmud");  
                           %>
 							           <div class="col-md-6" style="max-width: 15rem;">
@@ -154,8 +139,7 @@
 									           <div class="text-c-purple text-right" data-toggle="tooltip" data-placement="top" title="Porta de Mudança">
 	                                               <i class="fa fa-lock f-1" style="font-size: 22px; color: white;"></i>
 	                                           </div>
-									           <!--  <a href="<%= urlPortalGmud %>" class="waves-effect waves-dark"> -->
-	                                                <a href="javascript:DoPost('PortalGmud')"   class="waves-effect waves-dark"> 
+									           <a href="<%= urlPortalGmud %>" class="waves-effect waves-dark"> 
 									                <h6><i class="fa fa-cogs fa-3x text-primary" ></i></h6>
 									                <h6 class="card-title text-dark">Portal GMUD</h6>
 									           </a>
@@ -180,11 +164,39 @@
                                        </div>
                           <%  		 
                             	 }
-                                } 	   
-                             }                             	 
+                             } else{
                           %>
-                              
-                              
+						       <div class="col-md-4" style="max-width: 15rem;">
+						         <div class="card text-center h-10 wrimagecard wrimagecard-topimage" style="max-width: 15rem;">
+						            <div class="card-block">
+						                <div class="text-c-purple text-right" data-toggle="tooltip" data-placement="top" title="Você não tem acesso a esta área!">
+                                            <i class="fa fa-lock f-1" style="font-size: 22px; color: black;"></i>
+                                       </div>
+                                       <a href="#" style="pointer-events: none;" >
+						                  <h6><i class="fa fa-handshake-o fa-3x text-primary"></i></h6>
+						                  <h6 class="card-title text-dark">Portal MultiCloud</h6>
+						               </a> 
+						            </div>
+						         </div>
+						       </div>								
+                        
+					           <div class="col-md-6" style="max-width: 15rem;">
+					             <div class="card text-center h-10 wrimagecard wrimagecard-topimage" style="max-width: 15rem;">
+					                <div class="card-block">
+							           <div class="text-c-purple text-right" data-toggle="tooltip" data-placement="top" title="Você não tem acesso a esta área!">
+                                              <i class="fa fa-lock f-1" style="font-size: 22px; color: black;"></i>
+                                          </div>
+							           <a href="#" style="pointer-events: none;" > 
+							                <h6><i class="fa fa-cogs fa-3x text-primary" ></i></h6>
+							                <h6 class="card-title text-dark">Portal GMUD</h6>
+							           </a>
+					                </div>								                
+					             </div>
+                               </div>
+                          <%  	 
+                             }
+                          %>
+                          
                           
                               <!-- ===================================== -->
                               <!--  XWiki MultCloud Visivel para todos   -->
@@ -206,13 +218,12 @@
                            <!-- ============================= -->
                            <!--   Fecha DIV das aplicacoes    -->
                            <!-- ============================= -->
+                           <p class="h5"><strong>Usuários</strong></p>
+                           <div class="row my-12 text-primary">
                            <% 
                               String userRole = (String) session.getAttribute("userRole"); 
                               if(userRole.trim().equals("ADMIN")){
                            %>
-
-                           <p class="h5"><strong>Usuários</strong></p>
-                           <div class="row my-12 text-primary">
 					           <div class="col-md-4" style="max-width: 15rem;">
 					             <div class="card text-center h-10 wrimagecard wrimagecard-topimage" style="max-width: 15rem;">
 					                <div class="card-block">
@@ -227,9 +238,8 @@
 					             </div>
                                </div>
                            <%                           	  
-                              } //else{
+                              }else{
                            %>
-<!--  
 						        <div class="col-md-4" style="max-width: 15rem;">
 					             <div class="card text-center h-10 wrimagecard wrimagecard-topimage" style="max-width: 15rem;">
 					                <div class="card-block">
@@ -243,16 +253,14 @@
 					                </div>								                
 					             </div>
                                 </div>
--->
                            
                            <% 	  
                             	  
-       //                       }
+                              }
                            %>
                            </div>
-                              
-  </form>
-  
+                            
+                             
                         </div>
                     </div>
                 </div>
@@ -263,52 +271,7 @@
   </div> 
   
   <jsp:include page="javascriptfile.jsp"></jsp:include>
- <script type="text/javascript">
- 
- async function DoPost( aplic ){
-	 try {
-		 var urlAplicacao = document.getElementById("idUrlAplicacao").value;
-		 var login;
-		 var admin;
-		 var loginUnificado;
-		 var url;
-		 var urlDoGet;
-		 var urlDoPost;
-		 var urlLogin;
-		 var urlTelaAplic;
-	     var json = JSON.parse(urlAplicacao);  
-			
-	     for(var p = 0; p < json.length; p++){
-	         if( aplic === json[p].aplicacao ){
-	        	 login          = json[p].login;
-	        	 admin          = json[p].admin;
-	        	 loginUnificado = json[p].loginUnificado;
-	        	 url            = json[p].url;
-	        	 urlDoGet       = json[p].urlDoGet;
-	        	 urlDoPost      = json[p].urlDoPost;
-	        	 urlLogin       = json[p].urlLogin;
-	        	 urlTelaAplic   = ( json[p].urlTelaAplic !== undefined ? json[p].urlTelaAplic : null );
-	        	 break;
-	         }
-     	}
-	    var parametros = "?login=" + login +"&admin=" + admin + "&loginUnificado=" + loginUnificado + "&urlDoGet=" + urlDoGet + "&urlLogin=" + urlLogin + "&StatusSessao=PrimeiroAcesso"
-        document.getElementById('formLoginUniversal').action = urlDoPost + parametros;	 
-        document.getElementById('formLoginUniversal').submit();
 
-//	     document.getElementById('formLoginUniversal').action = 'http://localhost:8083/PortalMultiCloud/ServletLogin?urlAplicacao=' + urlAplicacao;	 
-//	     document.getElementById('formLoginUniversal').submit();
-//	     alert(aplic);
-		} catch (error) {
-		     
-		     alert( "Erro Acesso Portal MultiCloud",  error );
-		}
-
-  }
-
- </script>
 </body>
 
 </html>
-
-
-

@@ -13,9 +13,20 @@ public class Users implements Serializable{
 	private String passoword;
 	private String role;
     private String dt_criacao;
+    private String login_cadastro;
 	private Pessoa pessoa = new Pessoa();	
     private List<UserAplicativo> userAplicativos = new ArrayList<UserAplicativo>();
  
+	public String getLogin_cadastro() {
+		return login_cadastro;
+	}
+
+
+	public void setLogin_cadastro(String login_cadastro) {
+		this.login_cadastro = login_cadastro;
+	}
+
+
 	public Pessoa getPessoa() {
 		return pessoa;
 	}

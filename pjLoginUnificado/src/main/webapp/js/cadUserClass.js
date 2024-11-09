@@ -85,6 +85,7 @@ class CadastroUser{
 				        
 	        let imgDelete = document.createElement('img');
 	        imgDelete.src = this.getContextPath() +'/imagens/delete-40.png';
+			imgDelete.setAttribute('style', 'cursor:pointer;' );
 	        imgDelete.setAttribute('onclick','cadastroUser.deleteAplicativo( ' +  aplicativo[i].idUserAplic + ' )');
 	        td_delete.appendChild(imgDelete);
 				        

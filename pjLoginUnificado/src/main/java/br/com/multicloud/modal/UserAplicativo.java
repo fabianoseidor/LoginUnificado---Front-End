@@ -9,14 +9,24 @@ public class UserAplicativo implements Serializable{
 	private static final long serialVersionUID = -3136664057017268896L;
 
 	private Long id_user_aplicativo;
-	private Boolean admin = Boolean.FALSE;
-	private Boolean aprovador = Boolean.FALSE;;
-	private Boolean executor = Boolean.FALSE;;
-	private Boolean owner = Boolean.FALSE;;
+	private Boolean admin          = Boolean.FALSE;
+	private Boolean aprovador      = Boolean.FALSE;;
+	private Boolean executor       = Boolean.FALSE;;
+	private Boolean owner          = Boolean.FALSE;;
+	private Boolean aplicativoView = Boolean.FALSE;;
+	
     private String dt_criacao;
 	private Long users;
 	private Aplicacao aplicacao;
 	
+
+	public Boolean getAplicativoView() {
+		return aplicativoView;
+	}
+
+	public void setAplicativoView(Boolean aplicativoView) {
+		this.aplicativoView = aplicativoView;
+	}
 
 	public Long getUsers() {
 		return users;

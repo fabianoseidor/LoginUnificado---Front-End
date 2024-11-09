@@ -27,7 +27,7 @@ public class FilterAutenticacao extends HttpFilter implements Filter {
 
 	public void destroy() {
 		try {
-			connection.close();
+			if( connection != null ) connection.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -36,7 +36,7 @@ public class FilterAutenticacao extends HttpFilter implements Filter {
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 		try {
 			HttpServletRequest req = (HttpServletRequest) request;
-			HttpSession session = req.getSession();
+			HttpSession session = req.getSession();	
 			
 			String usuarioLogado = (String) session.getAttribute("usuario");
 			String urlParaAutent = req.getServletPath(); // URL que esta sendo acessada.
